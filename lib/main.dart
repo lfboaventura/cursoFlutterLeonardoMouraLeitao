@@ -15,7 +15,6 @@ class _PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-
     final perguntas = [
       {
         'texto': 'Qual é a sua cor favorita ?',
@@ -31,11 +30,13 @@ class _PerguntaAppState extends State<PerguntaApp> {
       }
     ];
 
-    List<Widget> respostas = [];
+    List<String> respostas = perguntas[_perguntaDelecionada]['respostas'];
+    // List<Widget> widgets =
+    //     respostas.map((t) => Resposta(t, _responder)).toList();
 
-    for (String textoResp in perguntas[_perguntaDelecionada]['respostas']) {
-      respostas.add(Resposta(textoResp, _responder));
-    }
+    // for (String textoResp in respostas ) {
+    //   widgets.add(Resposta(textoResp, _responder));
+    // }
 
     return MaterialApp(
       home: Scaffold(
@@ -45,7 +46,7 @@ class _PerguntaAppState extends State<PerguntaApp> {
         body: Column(
           children: [
             Questao(perguntas[_perguntaDelecionada]['texto']),
-            ...respostas,
+            ...respostas.map((t) => Resposta(t, _responder)).toList(),
           ],
         ),
       ),
