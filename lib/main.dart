@@ -6,49 +6,59 @@ main() => runApp(PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaDelecionada = 0;
+  final _perguntas = const [
+    {
+      'texto': 'Qual é a sua cor favorita ?',
+      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+    },
+    {
+      'texto': 'Qual o instrutor favorito?',
+      'respostas': ['Pedro', 'Maria', 'Marlin', 'João'],
+    }
+  ];
 
   void _responder() {
-    setState(() {
-      _perguntaDelecionada++;
-    });
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaDelecionada++;
+      });
+    }
+  }
+
+  bool get temPerguntaSelecionada {
+    return _perguntaDelecionada < _perguntas.length;
   }
 
   @override
   Widget build(BuildContext context) {
-    final perguntas = [
-      {
-        'texto': 'Qual é a sua cor favorita ?',
-        'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
-      },
-      {
-        'texto': 'Qual é o seu animal favorito?',
-        'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
-      },
-      {
-        'texto': 'Qual o instrutor favorito?',
-        'respostas': ['Pedro', 'Maria', 'Marlin', 'João'],
-      }
-    ];
-
-    List<String> respostas = perguntas[_perguntaDelecionada]['respostas'];
-    // List<Widget> widgets =
-    //     respostas.map((t) => Resposta(t, _responder)).toList();
-
-    // for (String textoResp in respostas ) {
-    //   widgets.add(Resposta(textoResp, _responder));
-    // }
+    List<String> respostas = temPerguntaSelecionada
+        ? _perguntas[_perguntaDelecionada]['respostas']
+        : null;
 
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('Perguntas'),
         ),
-        body: Column(
-          children: [
-            Questao(perguntas[_perguntaDelecionada]['texto']),
-            ...respostas.map((t) => Resposta(t, _responder)).toList(),
-          ],
-        ),
+        body: temPerguntaSelecionada
+            ? Column(
+                children: [
+                  Questao(_perguntas[_perguntaDelecionada]['texto']),
+                  ...respostas.map((t) => Resposta(t, _responder)).toList(),
+                ],
+              )
+            : Center(
+                child: Text(
+                  'Parabéns!',
+                  style: TextStyle(
+                    fontSize: 28,
+                  ),
+                ),
+              ),
       ),
     );
   }
